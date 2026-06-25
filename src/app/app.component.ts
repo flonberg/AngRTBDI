@@ -22,9 +22,23 @@ export class AppComponent {
     this.http.get<any>(phpApiUrl).subscribe({
       next: (response) => {
         this.phpData = response;
-        console.log('response:', response);
+        console.log("type of phpData:", typeof this.phpData);
+        for (const [key, value] of Object.entries(this.phpData)) {
+          if (this.canBeString(value) && String(value).includes('0074,1022')) {
+            console.log(`${key}: ${value}`);
+          }
+        }
+     //   console.log('response:', this.phpData);
       },
       error: (err) => console.error('Failed to reach PHP script:', err)
     });
+  }
+ canBeString(value: unknown) {
+  if (typeof value !== 'symbol') {
+    const safeString = String(value); // Outputs "null", "123", "[object Object]"
+    return true
+    }
+  else
+  return false  
   }
 }
