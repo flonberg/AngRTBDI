@@ -1,1 +1,27 @@
 <p>get-rtbdi works!</p>
+
+
+<table class="rtable">
+  <thead>
+    <tr>
+      <th>Reference Beam  Number</th>
+      <th>Reference Fraction Group Number</th>
+      <th>Reference Current Fraction Number</th>
+      <th>Treated</th>
+      <th>Partially Treated</th>
+      <th>Not Treated</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      <tr *ngFor = "let beam of beams">
+        <td>{{ beam.ReferencedBeamNumber }}</td>
+        <td>{{ beam.ReferencedFractionGroupNumber }}</td>
+        <td>{{ beam.CurrentFractionNumber }}</td>
+        <td><label class="radio-opt"><input type="radio" name="row1" value="treated"> Treated</label></td>
+        <td><label class="radio-opt"><input type="radio" name="row1" value="partially-treated"> Partially Treated</label></td>
+        <td><label class="radio-opt"><input type="radio" name="row1" value="not-treated"> Not Treated</label></td>
+      </tr>
+    
+  </tbody>  
+</table>

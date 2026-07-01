@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { CommonModule } from '@angular/common'; 
 type Beam = {
   CurrentFractionNumber: string;
   ReferencedBeamNumber: string;
@@ -10,7 +10,7 @@ type Beam = {
 @Component({
   selector: 'app-get-rtbdi',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './get-rtbdi.component.html',
   styleUrl: './get-rtbdi.component.css'
 })
