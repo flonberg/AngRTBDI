@@ -1,6 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; 
+import { RunScriptService } from '../run-Script.service';
+//import { execFile, spawn } from 'node:child_process';
+import { FormsModule } from '@angular/forms';
+
 type Beam = {
   CurrentFractionNumber: string;
   ReferencedBeamNumber: string;
@@ -16,9 +20,11 @@ type Beam = {
 })
 
 export class GetRTBDIComponent {
+   output = '';  // <-- this line needs to be there
   private http = inject(HttpClient); 
   phpData: any;
   beams: Beam[] = [];
+  constructor(private runScriptService: RunScriptService) {}
   ngOnInit() {
     this.fetchRTBCIData();
   }
@@ -28,6 +34,7 @@ export class GetRTBDIComponent {
     this.http.get<any>(phpApiUrl).subscribe({
       next: (response) => {
         this.phpData = response;
+        this.saveResponseToFile(this.phpData, 'phpData.txt');
         var beam = {} as Beam;  
         var startBeam = false;
         console.log("type of phpData:", typeof this.phpData);
@@ -45,8 +52,6 @@ export class GetRTBDIComponent {
               beam.ReferencedBeamNumber = this.getStringInBrackets(String(value)) || '';
               this.beams.push(beam);
           }
-   
-          
         }
         console.log("beams:", this.beams);
       },
@@ -56,5 +61,27 @@ export class GetRTBDIComponent {
   getStringInBrackets(input: string): string | null {
     const match = input.match(/\[(.*?)\]/);
     return match ? match[1] : null;
+  }
+  private saveResponseToFile(data: any, filename: string) {
+    // If the response is already a string (e.g. raw dump text), use it as-is.
+    // If it's a JSON object, pretty-print it so the saved file is readable.
+    const content = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+  public submit(){
+    console.log("clicked")
+        this.runScriptService.runScript().subscribe({
+        next: (res) => this.output = res.output,
+        error: (err) => this.output = `Error: ${err.message}`
+      });
   }
 }

@@ -1,27 +1,25 @@
-<p>get-rtbdi works!</p>
 
-
-<table class="rtable">
+<table >
   <thead>
     <tr>
-      <th>Reference Beam  Number</th>
-      <th>Reference Fraction Group Number</th>
-      <th>Reference Current Fraction Number</th>
+      <th>Ref. Beam  Number</th>
+      <th>Ref. Fraction Group Number</th>
+      <th>Ref. Current Fraction Number</th>
       <th>Treated</th>
       <th>Partially Treated</th>
       <th>Not Treated</th>
     </tr>
   </thead>
   <tbody>
-
-      <tr *ngFor = "let beam of beams">
+      <tr *ngFor = "let beam of beams; let i = index">
         <td>{{ beam.ReferencedBeamNumber }}</td>
         <td>{{ beam.ReferencedFractionGroupNumber }}</td>
         <td>{{ beam.CurrentFractionNumber }}</td>
-        <td><label class="radio-opt"><input type="radio" name="row1" value="treated"> Treated</label></td>
-        <td><label class="radio-opt"><input type="radio" name="row1" value="partially-treated"> Partially Treated</label></td>
-        <td><label class="radio-opt"><input type="radio" name="row1" value="not-treated"> Not Treated</label></td>
+        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="treated"> </label></td>
+        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="partially-treated"> </label></td>
+        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="not-treated"> </label></td>
       </tr>
-    
   </tbody>  
 </table>
+<button (click)="submit()">Submit</button>
+<pre>{{ output }}</pre>
