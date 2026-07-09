@@ -1,25 +1,30 @@
 
 <table >
   <thead>
-    <tr>
-      <th>Ref. Beam  Number</th>
-      <th>Ref. Fraction Group Number</th>
-      <th>Ref. Current Fraction Number</th>
-      <th>Treated</th>
-      <th>Partially Treated</th>
-      <th>Not Treated</th>
-    </tr>
+<tr *ngFor="let beam of beams; let i = index">
+  <td>{{ beam.ReferencedBeamNumber }}</td>
+  <td>{{ beam.ReferencedFractionGroupNumber }}</td>
+  <td>{{ beam.CurrentFractionNumber }}</td>
+  <td>
+    <label class="arrow-radio">
+      <input type="radio" name="row{{i}}" value="treated"
+             (click)="onSelect(i, 'treated')">
+    </label>
+  </td>
+  <td>
+    <label class="arrow-radio">
+      <input type="radio" name="row{{i}}" value="partially-treated"
+             (click)="onSelect(i, 'partially-treated')">
+    </label>
+  </td>
+  <td>
+    <label class="arrow-radio">
+      <input type="radio" name="row{{i}}" value="not-treated"
+             (click)="onSelect(i, 'not-treated')">
+    </label>
+  </td>
+</tr>
   </thead>
-  <tbody>
-      <tr *ngFor = "let beam of beams; let i = index">
-        <td>{{ beam.ReferencedBeamNumber }}</td>
-        <td>{{ beam.ReferencedFractionGroupNumber }}</td>
-        <td>{{ beam.CurrentFractionNumber }}</td>
-        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="treated"> </label></td>
-        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="partially-treated"> </label></td>
-        <td><label class="arrow-radio"><input type="radio" name="row{{i}}" value="not-treated"> </label></td>
-      </tr>
-  </tbody>  
 </table>
 <button (click)="submit()">Submit</button>
 <pre>{{ output }}</pre>

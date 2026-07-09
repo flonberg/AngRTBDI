@@ -8,7 +8,7 @@ export class RunScriptService {
 
   constructor(private http: HttpClient) {}
 
-  runScript(): Observable<{ output: string }> {
-    return this.http.get<{ output: string }>(this.url);
+  runScript(i: number, value: string): Observable<{ output: string }> {
+    return this.http.post<{ output: string }>(this.url, { i, value });
   }
 }

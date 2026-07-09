@@ -14,13 +14,16 @@ type Beam = {
 @Component({
   selector: 'app-get-rtbdi',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './get-rtbdi.component.html',
   styleUrl: './get-rtbdi.component.css'
 })
 
 export class GetRTBDIComponent {
    output = '';  // <-- this line needs to be there
+  selectedIndex: number | null = null;
+  selectedValue: string | null = null
+  selections: string[] = []; // selections[i] = 'treated' | 'partially-treated' | 'not-treated'
   private http = inject(HttpClient); 
   phpData: any;
   beams: Beam[] = [];
@@ -77,11 +80,21 @@ export class GetRTBDIComponent {
 
     URL.revokeObjectURL(url);
   }
-  public submit(){
-    console.log("clicked")
-        this.runScriptService.runScript().subscribe({
-        next: (res) => this.output = res.output,
-        error: (err) => this.output = `Error: ${err.message}`
-      });
+  onSelect(i: number, value: string) {
+    this.selections[i] = value;
+    console.log(`Row ${i} set to ${value}`);
   }
+submit() {
+  if (this.selectedIndex === null || this.selectedValue === null) {
+    this.output = 'Please select a beam status first.';
+    return;
+  }
+
+  this.output = 'Running...'; // <-- immediate feedback that submit fired
+
+  this.runScriptService.runScript(this.selectedIndex, this.selectedValue).subscribe({
+    next: (res) => this.output = res.output || '(Script ran but returned no output)',
+    error: (err) => this.output = `Error: ${err.message}`
+  });
+}
 }
